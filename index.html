@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>WebToAPK — Convert Website ke Android APK</title>
+<meta name="description" content="Convert website kamu jadi APK Android gratis. Powered by PWABuilder."/>
+<link rel="manifest" href="/manifest.json"/>
+<meta name="theme-color" content="#0f0f0f"/>
+<style>
+  :root {
+    --bg: #0f0f0f;
+    --bg2: #1a1a1a;
+    --bg3: #242424;
+    --border: rgba(255,255,255,0.08);
+    --border-strong: rgba(255,255,255,0.15);
+    --text: #f0f0f0;
+    --muted: #888;
+    --accent: #3b82f6;
+    --accent-bg: rgba(59,130,246,0.12);
+    --success: #22c55e;
+    --success-bg: rgba(34,197,94,0.1);
+    --danger: #ef4444;
+    --danger-bg: rgba(239,68,68,0.1);
+    --warning: #f59e0b;
+    --radius: 10px;
+    --radius-lg: 16px;
+    --font: 'Inter', system-ui, sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--font);
+    font-size:15px;
+    line-height:1.6;
+    min-height:100vh;
+  }
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+
+  /* HEADER */
+  header{
+    border-bottom:1px solid var(--border);
+    padding:1rem 1.5rem;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    position:sticky;
+    top:0;
+    background:rgba(15,15,15,0.9);
+    backdrop-filter:blur(12px);
+    z-index:100;
+  }
+  .logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-weight:700;
+    font-size:1.1rem;
+    letter-spacing:-0.02em;
+  }
+  .logo-icon{
+    width:32px;height:32px;
+    background:var(--accent);
+    border-radius:8px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:16px;
+  }
+  .badge{
+    font-size:11px;
+    padding:2px 8px;
+    border-radius:20px;
+    background:var(--accent-bg);
+    color:var(--accent);
+    border:1px solid rgba(59,130,246,0.25);
+    font-weight:500;
+  }
+
+  /* HERO */
+  .hero{
+    max-width:680px;
+    margin:0 auto;
+    padding:4rem 1.5rem 2rem;
+    text-align:center;
+  }
+  .hero-tag{
+    display:inline-block;
+    font-size:12px;
+    font-weight:500;
+    color:var(--muted);
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    margin-bottom:1.25rem;
+  }
+  h1{
+    font-size:clamp(2rem,5vw,3.25rem);
+    font-weight:800;
+    line-height:1.1;
+    letter-spacing:-0.04em;
+    color:#fff;
+    margin-bottom:1rem;
+  }
+  h1 span{color:var(--accent)}
+  .hero p{
+    color:var(--muted);
+    font-size:1rem;
+    max-width:500px;
+    margin:0 auto 2rem;
+  }
+
+  /* STEPS */
+  .steps{
+    display:flex;
+    gap:8px;
+    justify-content:center;
+    flex-wrap:wrap;
+    margin-bottom:2.5rem;
+  }
+  .step{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:13px;
+    color:var(--muted);
+  }
+  .step-num{
+    width:22px;height:22px;
+    border-radius:50%;
+    background:var(--bg3);
+    border:1px solid var(--border-strong);
+    display:flex;align-items:center;justify-content:center;
+    font-size:11px;
+    font-weight:600;
+    color:var(--accent);
+  }
+  .step-sep{color:var(--border-strong)}
+
+  /* MAIN CARD */
+  .card{
+    background:var(--bg2);
+    border:1px solid var(--border);
+    border-radius:var(--radius-lg);
+    padding:1.75rem;
+    max-width:680px;
+    margin:0 auto 1.5rem;
+  }
+  .card-title{
+    font-size:13px;
+    font-weight:600;
+    color:var(--muted);
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    margin-bottom:1.25rem;
+  }
+
+  /* FORM */
+  .form-grid{
+    display:grid;
+    gap:1rem;
+  }
+  .field{display:flex;flex-direction:column;gap:6px}
+  label{
+    font-size:13px;
+    font-weight:500;
+    color:var(--muted);
+  }
+  input[type=text],input[type=url],input[type=color]{
+    background:var(--bg3);
+    border:1px solid var(--border-strong);
+    border-radius:var(--radius);
+    color:var(--text);
+    font-size:14px;
+    padding:10px 14px;
+    outline:none;
+    transition:border-color 0.2s;
+    width:100%;
+    font-family:var(--font);
+  }
+  input[type=text]:focus,input[type=url]:focus{
+    border-color:var(--accent);
+  }
+  input[type=text]::placeholder,input[type=url]::placeholder{
+    color:#555;
+  }
+  .input-error{
+    border-color:var(--danger) !important;
+  }
+  .err-msg{
+    font-size:12px;
+    color:var(--danger);
+    display:none;
+  }
+  .err-msg.show{display:block}
+
+  /* COLOR ROW */
+  .color-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:1rem;
+  }
+  .color-wrap{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:var(--bg3);
+    border:1px solid var(--border-strong);
+    border-radius:var(--radius);
+    padding:8px 12px;
+  }
+  input[type=color]{
+    width:32px;height:32px;
+    border-radius:6px;
+    padding:0;
+    border:none;
+    cursor:pointer;
+    background:none;
+  }
+  .color-label{font-size:13px;color:var(--muted)}
+  .color-hex{font-size:13px;font-weight:500;margin-left:auto}
+
+  /* ICON UPLOAD */
+  .upload-zone{
+    border:1px dashed var(--border-strong);
+    border-radius:var(--radius);
+    padding:1.5rem;
+    text-align:center;
+    cursor:pointer;
+    transition:border-color 0.2s,background 0.2s;
+    position:relative;
+    overflow:hidden;
+  }
+  .upload-zone:hover{
+    border-color:var(--accent);
+    background:var(--accent-bg);
+  }
+  .upload-zone input{
+    position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;
+  }
+  .upload-icon{
+    font-size:2rem;margin-bottom:8px;
+  }
+  .upload-text{font-size:13px;color:var(--muted)}
+  .upload-text strong{color:var(--text)}
+  #icon-preview{
+    width:64px;height:64px;
+    border-radius:12px;
+    object-fit:cover;
+    margin:0 auto 8px;
+    display:none;
+    border:2px solid var(--border-strong);
+  }
+
+  /* SPLASH SECTION */
+  .splash-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:1rem;
+  }
+
+  /* ORIENTATION TOGGLE */
+  .toggle-group{
+    display:flex;
+    gap:6px;
+  }
+  .toggle-btn{
+    flex:1;
+    padding:8px;
+    border:1px solid var(--border-strong);
+    border-radius:8px;
+    background:var(--bg3);
+    color:var(--muted);
+    font-size:13px;
+    cursor:pointer;
+    transition:all 0.2s;
+    text-align:center;
+    font-family:var(--font);
+  }
+  .toggle-btn.active{
+    border-color:var(--accent);
+    background:var(--accent-bg);
+    color:var(--accent);
+    font-weight:500;
+  }
+
+  /* SUBMIT BTN */
+  .btn-primary{
+    width:100%;
+    padding:14px;
+    background:var(--accent);
+    border:none;
+    border-radius:var(--radius);
+    color:#fff;
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+    transition:opacity 0.2s,transform 0.1s;
+    font-family:var(--font);
+    letter-spacing:-0.01em;
+  }
+  .btn-primary:hover{opacity:0.88}
+  .btn-primary:active{transform:scale(0.98)}
+  .btn-primary:disabled{opacity:0.4;cursor:not-allowed}
+
+  /* PROGRESS */
+  .progress-wrap{
+    display:none;
+    flex-direction:column;
+    gap:12px;
+    margin-top:1.5rem;
+  }
+  .progress-wrap.show{display:flex}
+  .progress-bar-bg{
+    height:4px;
+    background:var(--bg3);
+    border-radius:2px;
+    overflow:hidden;
+  }
+  .progress-bar{
+    height:100%;
+    background:var(--accent);
+    border-radius:2px;
+    width:0%;
+    transition:width 0.4s ease;
+  }
+  .progress-steps{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+  .progress-step{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:13px;
+    color:var(--muted);
+  }
+  .progress-step.done{color:var(--success)}
+  .progress-step.active{color:var(--text)}
+  .ps-icon{
+    width:18px;height:18px;
+    border-radius:50%;
+    border:1.5px solid var(--border-strong);
+    display:flex;align-items:center;justify-content:center;
+    font-size:10px;
+    flex-shrink:0;
+  }
+  .progress-step.done .ps-icon{
+    background:var(--success-bg);
+    border-color:var(--success);
+    color:var(--success);
+  }
+  .progress-step.active .ps-icon{
+    border-color:var(--accent);
+    color:var(--accent);
+    animation:pulse 1s infinite;
+  }
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+
+  /* RESULT */
+  .result-card{
+    display:none;
+    background:var(--success-bg);
+    border:1px solid rgba(34,197,94,0.25);
+    border-radius:var(--radius-lg);
+    padding:1.5rem;
+    margin-top:1rem;
+    text-align:center;
+  }
+  .result-card.show{display:block}
+  .result-icon{font-size:2.5rem;margin-bottom:12px}
+  .result-title{font-size:1.1rem;font-weight:700;color:#fff;margin-bottom:8px}
+  .result-desc{font-size:13px;color:var(--muted);margin-bottom:1.25rem}
+  .result-url{
+    display:block;
+    background:var(--bg2);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:10px 14px;
+    font-size:13px;
+    color:var(--accent);
+    word-break:break-all;
+    margin-bottom:1rem;
+    text-align:left;
+  }
+  .btn-dl{
+    display:inline-block;
+    padding:11px 24px;
+    background:var(--success);
+    border-radius:var(--radius);
+    color:#000;
+    font-weight:700;
+    font-size:14px;
+    cursor:pointer;
+    border:none;
+    font-family:var(--font);
+    transition:opacity 0.2s;
+    text-decoration:none;
+  }
+  .btn-dl:hover{opacity:0.85;text-decoration:none}
+
+  /* ERROR CARD */
+  .error-card{
+    display:none;
+    background:var(--danger-bg);
+    border:1px solid rgba(239,68,68,0.25);
+    border-radius:var(--radius-lg);
+    padding:1.25rem 1.5rem;
+    margin-top:1rem;
+    font-size:13px;
+    color:var(--danger);
+  }
+  .error-card.show{display:block}
+
+  /* INFO CARDS */
+  .info-grid{
+    max-width:680px;
+    margin:0 auto 3rem;
+    padding:0 1.5rem;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:1rem;
+  }
+  .info-card{
+    background:var(--bg2);
+    border:1px solid var(--border);
+    border-radius:var(--radius-lg);
+    padding:1.25rem;
+  }
+  .info-icon{font-size:1.5rem;margin-bottom:10px}
+  .info-card h3{font-size:14px;font-weight:600;margin-bottom:6px;color:#fff}
+  .info-card p{font-size:13px;color:var(--muted);line-height:1.5}
+
+  /* FOOTER */
+  footer{
+    border-top:1px solid var(--border);
+    padding:1.5rem;
+    text-align:center;
+    font-size:13px;
+    color:var(--muted);
+  }
+  footer a{color:var(--muted)}
+  footer a:hover{color:var(--text)}
+
+  @media(max-width:500px){
+    .color-row,.splash-row{grid-template-columns:1fr}
+    .hero{padding:2.5rem 1.25rem 1.5rem}
+    .card{padding:1.25rem}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">📦</div>
+    WebToAPK
+  </div>
+  <span class="badge">Gratis · PWABuilder</span>
+</header>
+
+<section class="hero">
+  <span class="hero-tag">Web → Android</span>
+  <h1>Jadikan websitemu<br/><span>APK Android</span></h1>
+  <p>Masukkan URL website, isi detail app, dan dapatkan APK siap install. Gratis, tanpa akun.</p>
+  <div class="steps">
+    <div class="step"><div class="step-num">1</div><span>Isi form</span></div>
+    <div class="step-sep">·</div>
+    <div class="step"><div class="step-num">2</div><span>Build otomatis</span></div>
+    <div class="step-sep">·</div>
+    <div class="step"><div class="step-num">3</div><span>Download APK</span></div>
+  </div>
+</section>
+
+<div style="padding:0 1.5rem">
+
+  <!-- STEP 1: URL & INFO -->
+  <div class="card">
+    <div class="card-title">1 — Detail Website</div>
+    <div class="form-grid">
+
+      <div class="field">
+        <label for="url">URL Website *</label>
+        <input type="url" id="url" placeholder="https://example.com"/>
+        <span class="err-msg" id="url-err">URL tidak valid. Contoh: https://example.com</span>
+      </div>
+
+      <div class="field">
+        <label for="appname">Nama Aplikasi *</label>
+        <input type="text" id="appname" placeholder="My Awesome App"/>
+        <span class="err-msg" id="appname-err">Nama aplikasi wajib diisi</span>
+      </div>
+
+      <div class="field">
+        <label for="pkgname">Package Name *</label>
+        <input type="text" id="pkgname" placeholder="com.yourname.appname"/>
+        <span class="err-msg" id="pkgname-err">Format: com.nama.app (huruf kecil, titik)</span>
+      </div>
+
+      <div class="field">
+        <label for="appver">Versi App</label>
+        <input type="text" id="appver" placeholder="1.0.0" value="1.0.0"/>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- STEP 2: ICON & SPLASH -->
+  <div class="card">
+    <div class="card-title">2 — Icon & Splash Screen</div>
+    <div class="form-grid">
+
+      <div class="field">
+        <label>Icon App (512×512 PNG, opsional)</label>
+        <div class="upload-zone" id="icon-zone">
+          <input type="file" id="icon-file" accept="image/*"/>
+          <img id="icon-preview" alt="preview"/>
+          <div class="upload-icon" id="upload-icon-placeholder">🖼️</div>
+          <div class="upload-text" id="upload-text-placeholder">
+            <strong>Klik untuk upload icon</strong><br/>PNG 512×512 direkomendasikan
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Warna Tema</label>
+        <div class="color-row">
+          <div class="color-wrap">
+            <input type="color" id="theme-color" value="#3b82f6"/>
+            <span class="color-label">Theme</span>
+            <span class="color-hex" id="theme-hex">#3b82f6</span>
+          </div>
+          <div class="color-wrap">
+            <input type="color" id="bg-color" value="#ffffff"/>
+            <span class="color-label">Background</span>
+            <span class="color-hex" id="bg-hex">#ffffff</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Warna Splash Screen</label>
+        <div class="color-wrap" style="max-width:220px">
+          <input type="color" id="splash-color" value="#0f0f0f"/>
+          <span class="color-label">Splash bg</span>
+          <span class="color-hex" id="splash-hex">#0f0f0f</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Orientasi</label>
+        <div class="toggle-group" id="orientation-group">
+          <button class="toggle-btn active" data-val="portrait">Portrait</button>
+          <button class="toggle-btn" data-val="landscape">Landscape</button>
+          <button class="toggle-btn" data-val="any">Bebas</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Tampilan (display mode)</label>
+        <div class="toggle-group" id="display-group">
+          <button class="toggle-btn active" data-val="standalone">Standalone</button>
+          <button class="toggle-btn" data-val="fullscreen">Fullscreen</button>
+          <button class="toggle-btn" data-val="minimal-ui">Minimal UI</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- BUILD BUTTON -->
+  <div style="max-width:680px;margin:0 auto 1rem">
+    <button class="btn-primary" id="build-btn" onclick="startBuild()">
+      🔨 Build APK Sekarang
+    </button>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="card progress-wrap" id="progress-section">
+    <div class="card-title">Proses Build</div>
+    <div class="progress-bar-bg"><div class="progress-bar" id="pbar"></div></div>
+    <div class="progress-steps" id="psteps">
+      <div class="progress-step" id="ps1">
+        <div class="ps-icon">1</div><span>Validasi URL & konfigurasi</span>
+      </div>
+      <div class="progress-step" id="ps2">
+        <div class="ps-icon">2</div><span>Generate manifest.json & service worker</span>
+      </div>
+      <div class="progress-step" id="ps3">
+        <div class="ps-icon">3</div><span>Menghubungi PWABuilder API</span>
+      </div>
+      <div class="progress-step" id="ps4">
+        <div class="ps-icon">4</div><span>Menyiapkan paket APK</span>
+      </div>
+      <div class="progress-step" id="ps5">
+        <div class="ps-icon">5</div><span>Selesai!</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div class="result-card" id="result-card">
+    <div class="result-icon">✅</div>
+    <div class="result-title">APK Siap!</div>
+    <div class="result-desc" id="result-desc">Package berhasil digenerate. Klik tombol di bawah untuk download.</div>
+    <a class="result-url" id="result-url" href="#" target="_blank"></a>
+    <a class="btn-dl" id="dl-btn" href="#" target="_blank">⬇️ Download Package APK</a>
+    <p style="font-size:12px;color:var(--muted);margin-top:1rem">
+      File berisi project Android siap build. Buka di Android Studio atau upload ke PWABuilder untuk generate APK final.
+    </p>
+  </div>
+
+  <!-- ERROR -->
+  <div class="error-card" id="error-card">
+    <strong>⚠️ Terjadi Kesalahan</strong><br/>
+    <span id="error-msg"></span>
+  </div>
+
+</div><!-- end padding wrap -->
+
+<!-- INFO CARDS -->
+<div class="info-grid">
+  <div class="info-card">
+    <div class="info-icon">⚡</div>
+    <h3>Proses Otomatis</h3>
+    <p>Submit form → dapat package Android dalam hitungan detik. Tanpa coding.</p>
+  </div>
+  <div class="info-card">
+    <div class="info-icon">🔒</div>
+    <h3>HTTPS Wajib</h3>
+    <p>Website harus HTTPS. Netlify, Vercel, GitHub Pages sudah HTTPS by default.</p>
+  </div>
+  <div class="info-card">
+    <div class="info-icon">📱</div>
+    <h3>Berbasis TWA</h3>
+    <p>Pakai teknologi Trusted Web Activity Google — bukan webview biasa, lebih cepat.</p>
+  </div>
+</div>
+
+<footer>
+  Powered by <a href="https://www.pwabuilder.com" target="_blank">PWABuilder</a> ·
+  Deploy di <a href="https://netlify.com" target="_blank">Netlify</a> ·
+  Gratis & Open Source
+</footer>
+
+<script>
+let orientation = 'portrait';
+let displayMode = 'standalone';
+let iconBase64 = null;
+let iconMime = null;
+
+// Toggle groups
+document.querySelectorAll('#orientation-group .toggle-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#orientation-group .toggle-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    orientation = btn.dataset.val;
+  });
+});
+document.querySelectorAll('#display-group .toggle-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#display-group .toggle-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    displayMode = btn.dataset.val;
+  });
+});
+
+// Color pickers
+document.getElementById('theme-color').addEventListener('input', function(){
+  document.getElementById('theme-hex').textContent = this.value;
+});
+document.getElementById('bg-color').addEventListener('input', function(){
+  document.getElementById('bg-hex').textContent = this.value;
+});
+document.getElementById('splash-color').addEventListener('input', function(){
+  document.getElementById('splash-hex').textContent = this.value;
+});
+
+// Icon upload
+document.getElementById('icon-file').addEventListener('change', function(){
+  const file = this.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    iconBase64 = e.target.result.split(',')[1];
+    iconMime = file.type;
+    document.getElementById('icon-preview').src = e.target.result;
+    document.getElementById('icon-preview').style.display = 'block';
+    document.getElementById('upload-icon-placeholder').style.display = 'none';
+    document.getElementById('upload-text-placeholder').innerHTML = '<strong>' + file.name + '</strong><br/>Klik untuk ganti';
+  };
+  reader.readAsDataURL(file);
+});
+
+// Auto-fill package name dari URL
+document.getElementById('url').addEventListener('blur', function(){
+  const url = this.value.trim();
+  if(!url) return;
+  const pkg = document.getElementById('pkgname');
+  if(pkg.value) return;
+  try{
+    const u = new URL(url);
+    const parts = u.hostname.replace('www.','').split('.').reverse();
+    pkg.value = parts.slice(0,2).join('.') + '.' + (parts[2] || 'app');
+  } catch(e){}
+});
+
+function validateURL(val){
+  try{new URL(val);return val.startsWith('http');}catch(e){return false;}
+}
+function validatePkg(val){
+  return /^[a-z][a-z0-9_]*(\.[a-z][a-z0-9_]*)+$/.test(val);
+}
+
+function setError(fieldId, errId, show){
+  const el = document.getElementById(fieldId);
+  const err = document.getElementById(errId);
+  el.classList.toggle('input-error', show);
+  err.classList.toggle('show', show);
+}
+
+function setStep(n, state){
+  const el = document.getElementById('ps'+n);
+  el.className = 'progress-step ' + state;
+  const icon = el.querySelector('.ps-icon');
+  if(state==='done') icon.textContent = '✓';
+  else if(state==='active') icon.textContent = n;
+  else icon.textContent = n;
+}
+
+function setProgress(pct){
+  document.getElementById('pbar').style.width = pct + '%';
+}
+
+async function startBuild(){
+  // Reset errors
+  ['url','appname','pkgname'].forEach(id => {
+    setError(id, id+'-err', false);
+  });
+  document.getElementById('result-card').classList.remove('show');
+  document.getElementById('error-card').classList.remove('show');
+
+  const url = document.getElementById('url').value.trim();
+  const appname = document.getElementById('appname').value.trim();
+  const pkgname = document.getElementById('pkgname').value.trim();
+  const appver = document.getElementById('appver').value.trim() || '1.0.0';
+  const themeColor = document.getElementById('theme-color').value;
+  const bgColor = document.getElementById('bg-color').value;
+  const splashColor = document.getElementById('splash-color').value;
+
+  let valid = true;
+  if(!validateURL(url)){setError('url','url-err',true);valid=false;}
+  if(!appname){setError('appname','appname-err',true);valid=false;}
+  if(!validatePkg(pkgname)){setError('pkgname','pkgname-err',true);valid=false;}
+  if(!valid) return;
+
+  const btn = document.getElementById('build-btn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Memproses...';
+
+  const prog = document.getElementById('progress-section');
+  prog.classList.add('show');
+  setProgress(0);
+  [1,2,3,4,5].forEach(n => setStep(n,''));
+
+  // STEP 1 — validasi
+  setStep(1,'active');
+  setProgress(10);
+  await sleep(800);
+
+  // Build manifest JSON
+  const manifest = {
+    name: appname,
+    short_name: appname.length > 12 ? appname.substring(0,12) : appname,
+    start_url: url,
+    display: displayMode,
+    orientation: orientation,
+    theme_color: themeColor,
+    background_color: bgColor,
+    description: appname + ' - built with WebToAPK',
+    lang: 'id',
+    scope: url,
+    icons: iconBase64 ? [
+      {src: 'icon-512.png', sizes: '512x512', type: iconMime || 'image/png', purpose: 'any maskable'},
+      {src: 'icon-192.png', sizes: '192x192', type: iconMime || 'image/png', purpose: 'any maskable'}
+    ] : [
+      {src: 'https://via.placeholder.com/512', sizes: '512x512', type: 'image/png', purpose: 'any maskable'},
+      {src: 'https://via.placeholder.com/192', sizes: '192x192', type: 'image/png', purpose: 'any maskable'}
+    ],
+    screenshots: [],
+    categories: ['productivity'],
+    prefer_related_applications: false
+  };
+
+  setStep(1,'done');
+  setStep(2,'active');
+  setProgress(30);
+  await sleep(800);
+  setStep(2,'done');
+
+  // STEP 3 — call PWABuilder API
+  setStep(3,'active');
+  setProgress(50);
+
+  let apiSuccess = false;
+  let packageUrl = '';
+
+  try {
+    // PWABuilder generate endpoint
+    const payload = {
+      url: url,
+      packageId: pkgname,
+      name: appname,
+      launcherName: appname,
+      appVersion: appver,
+      appVersionCode: 1,
+      display: displayMode,
+      orientation: orientation,
+      themeColor: themeColor,
+      navigationColor: themeColor,
+      navigationColorDark: themeColor,
+      navigationDividerColor: themeColor,
+      navigationDividerColorDark: themeColor,
+      backgroundColor: bgColor,
+      enableNotifications: true,
+      enableLocationDelegation: false,
+      enablePlayBilling: false,
+      includeSourceCode: false,
+      signingMode: 'none',
+      manifest: JSON.stringify(manifest),
+      fallbackType: 'customtabs',
+      features: {
+        locationDelegation: {enabled: false},
+        playBilling: {enabled: false}
+      },
+      settings: {
+        colorScheme: 'default',
+        navigationBar: {enabled: false},
+        updateMode: 'store',
+        crashReporting: false
+      },
+      splashScreenFadeOutDuration: 300,
+      host: new URL(url).hostname
+    };
+
+    const resp = await fetch('https://pwabuilder-cloudapk.azurewebsites.net/generateSignedApk', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload)
+    });
+
+    if(resp.ok){
+      const blob = await resp.blob();
+      packageUrl = URL.createObjectURL(blob);
+      apiSuccess = true;
+    }
+  } catch(e){
+    apiSuccess = false;
+  }
+
+  setStep(3,'done');
+  setStep(4,'active');
+  setProgress(80);
+  await sleep(600);
+  setStep(4,'done');
+  setStep(5,'active');
+  setProgress(100);
+  await sleep(400);
+  setStep(5,'done');
+
+  btn.disabled = false;
+  btn.textContent = '🔨 Build APK Sekarang';
+
+  if(apiSuccess && packageUrl){
+    document.getElementById('result-desc').textContent =
+      'APK package untuk "'+appname+'" berhasil dibuat! Download dan install ke Android.';
+    document.getElementById('result-url').textContent = url + ' → ' + pkgname;
+    document.getElementById('dl-btn').href = packageUrl;
+    document.getElementById('dl-btn').download = pkgname + '.apk';
+    document.getElementById('result-card').classList.add('show');
+  } else {
+    // Fallback: arahkan ke PWABuilder langsung
+    const pwaUrl = 'https://www.pwabuilder.com/generate?site=' + encodeURIComponent(url);
+    document.getElementById('result-desc').textContent =
+      'Build otomatis tidak tersedia saat ini. Gunakan PWABuilder langsung dengan konfigurasi:';
+    document.getElementById('result-url').textContent = url;
+    document.getElementById('result-url').href = pwaUrl;
+    document.getElementById('result-url').target = '_blank';
+    const dlBtn = document.getElementById('dl-btn');
+    dlBtn.textContent = '🌐 Buka PWABuilder →';
+    dlBtn.href = pwaUrl;
+    dlBtn.target = '_blank';
+    dlBtn.removeAttribute('download');
+    document.getElementById('result-card').classList.add('show');
+
+    // Juga tampilkan config info
+    showConfigInfo(manifest, pkgname, themeColor, splashColor);
+  }
+
+  prog.classList.remove('show');
+}
+
+function showConfigInfo(manifest, pkgname, themeColor, splashColor){
+  const info = document.createElement('div');
+  info.style.cssText='background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:1rem;margin-top:1rem;font-size:12px;color:var(--muted);text-align:left;';
+  info.innerHTML = `<strong style="color:var(--text)">Konfigurasi untuk PWABuilder:</strong><br/><br/>
+    <b>Package:</b> ${pkgname}<br/>
+    <b>Theme:</b> ${themeColor}<br/>
+    <b>Splash:</b> ${splashColor}<br/>
+    <b>Display:</b> ${displayMode}<br/>
+    <b>Orientation:</b> ${orientation}<br/><br/>
+    <strong style="color:var(--text)">manifest.json yang digunakan:</strong><br/>
+    <pre style="margin-top:8px;overflow-x:auto;white-space:pre-wrap;word-break:break-all">${JSON.stringify(manifest,null,2)}</pre>`;
+  document.getElementById('result-card').appendChild(info);
+}
+
+function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
+</script>
+</body>
+</html>
